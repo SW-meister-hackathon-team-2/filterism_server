@@ -80,7 +80,7 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
 
         final var hashtags = hashtagJpaRepository.findAllById(form.hashtags());
 
-        template.update(form.title(), form.description(), hashtags);
+        template.update(form.title(), form.description(), hashtags, form.accessScope());
     }
 
     @Override
