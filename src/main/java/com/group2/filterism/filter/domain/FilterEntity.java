@@ -1,12 +1,13 @@
 package com.group2.filterism.filter.domain;
 
 import com.group2.filterism.filter.vo.AccessScope;
-import com.group2.filterism.hashtag.domain.Hashtag;
+import com.group2.filterism.hashtag.domain.HashtagEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Document
-class FilterEntity {
+public class FilterEntity {
 
     @Id
     private String id;
@@ -23,7 +24,8 @@ class FilterEntity {
 
     private String description;
 
-    private List<Hashtag> hashTags;
+    @DBRef
+    private List<HashtagEntity> hashTags;
 
     private AccessScope accessScope;
 
@@ -35,7 +37,7 @@ class FilterEntity {
     private Long version;
 
     @Builder
-    public FilterEntity(String title, String description, List<Hashtag> hashTags, AccessScope accessScope, Long usedCount, String fileName) {
+    public FilterEntity(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope, Long usedCount, String fileName) {
         this.title = title;
         this.description = description;
         this.hashTags = hashTags;
