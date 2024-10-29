@@ -21,11 +21,16 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String nickname;
+    private String name;
 
     @Builder
-    public User(String email, String nickname) {
+    public User(String email, String name) {
         this.email = email;
-        this.nickname = nickname;
+        this.name = name;
+    }
+
+    public void update(String email, String name) {
+        this.email = email;
+        this.name = name;
     }
 }
