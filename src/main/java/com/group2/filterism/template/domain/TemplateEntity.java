@@ -51,18 +51,19 @@ public class TemplateEntity {
         usedCount++;
     }
 
-    public void update(String title, String description, List<HashtagEntity> hashTags) {
+    public void update(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope) {
         this.title = title;
         this.description = description;
         this.hashtags = hashTags;
+        this.accessScope = accessScope;
     }
 
     @Builder
-    public TemplateEntity(String title, String description, List<HashtagEntity> hashtags, TemplateType type, String fileId) {
+    public TemplateEntity(String title, String description, List<HashtagEntity> hashtags, AccessScope accessScope, TemplateType type, String fileId) {
         this.title = title;
         this.description = description;
         this.hashtags = hashtags;
-        this.accessScope = AccessScope.PRIVATE;
+        this.accessScope = accessScope;
         this.type = type;
         this.usedCount = 0L;
         this.fileId = fileId;

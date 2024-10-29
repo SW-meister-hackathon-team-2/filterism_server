@@ -63,7 +63,8 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
         final var template = TemplateEntity.builder()
                 .title(form.title())
                 .description(form.description())
-                .hashTags(hashtags)
+                .hashtags(hashtags)
+                .accessScope(form.accessScope())
                 .type(form.type())
                 .fileId(uuid)
                 .build();
