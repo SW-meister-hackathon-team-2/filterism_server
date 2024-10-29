@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ReadHashtagUseCase {
+public interface HashtagReadUseCase {
     List<HashtagResponse> readAll();
 }
 
 @Service
 @RequiredArgsConstructor
-class ReadHashtagUseCaseImpl implements ReadHashtagUseCase {
+class HashtagReadUseCaseImpl implements HashtagReadUseCase {
     private final HashtagJpaRepository repository;
 
     @Override

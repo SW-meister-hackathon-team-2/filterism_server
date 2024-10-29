@@ -9,5 +9,4 @@ public record HashtagResponse(
     public static HashtagResponse create(HashtagEntity entity) {
         return new HashtagResponse(entity.getId(), entity.getName());
     }
-
 }
