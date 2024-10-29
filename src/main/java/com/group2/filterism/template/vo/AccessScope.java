@@ -1,4 +1,4 @@
-package com.group2.filterism.filter.vo;
+package com.group2.filterism.template.vo;
 
 public enum AccessScope {
     PUBLIC,
