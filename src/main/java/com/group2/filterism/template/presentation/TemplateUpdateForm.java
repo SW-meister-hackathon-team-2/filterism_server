@@ -2,10 +2,12 @@ package com.group2.filterism.template.presentation;
 
 import com.group2.filterism.template.vo.AccessScope;
 
-public record TemplateForm(
+import java.util.List;
+
+public record TemplateUpdateForm(
         String title,
         String description,
-        // hashtag
-        AccessScope accessScope
+        AccessScope accessScope,
+        List<Long> hashtags
 ) {
 }

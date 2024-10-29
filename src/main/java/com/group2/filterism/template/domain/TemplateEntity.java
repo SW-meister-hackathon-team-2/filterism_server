@@ -46,14 +46,21 @@ public class TemplateEntity {
     @Version
     private Long version;
 
+    public void update(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope) {
+        this.title = title;
+        this.description = description;
+        this.hashTags = hashTags;
+        this.accessScope = accessScope;
+    }
+
     @Builder
-    public TemplateEntity(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope, TemplateType type, Long usedCount, String fileName) {
+    public TemplateEntity(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope, TemplateType type, String fileName) {
         this.title = title;
         this.description = description;
         this.hashTags = hashTags;
         this.accessScope = accessScope;
         this.type = type;
-        this.usedCount = usedCount;
+        this.usedCount = 0L;
         this.fileName = fileName;
     }
 }
