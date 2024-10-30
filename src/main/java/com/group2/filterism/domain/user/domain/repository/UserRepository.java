@@ -1,6 +1,6 @@
-package com.group2.filterism.user.domain.repository;
+package com.group2.filterism.domain.user.domain.repository;
 
-import com.group2.filterism.user.domain.User;
+import com.group2.filterism.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

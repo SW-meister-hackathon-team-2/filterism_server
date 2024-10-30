@@ -1,6 +1,7 @@
 package com.group2.filterism.global.config.auth.dto;
 
-import com.group2.filterism.user.domain.User;
+import com.group2.filterism.domain.user.domain.User;
+import com.group2.filterism.domain.user.domain.vo.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -37,6 +38,7 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
+                .role(Role.USER)
                 .build();
     }
 }

@@ -1,10 +1,12 @@
 package com.group2.filterism.global.config.auth.dto;
 
-import com.group2.filterism.user.domain.User;
+import com.group2.filterism.domain.user.domain.User;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class SessionUser {
+public class SessionUser implements Serializable {
     private final String name;
     private final String email;
 

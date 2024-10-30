@@ -1,5 +1,6 @@
 package com.group2.filterism.global.config;
 
+import com.group2.filterism.domain.user.domain.vo.Role;
 import com.group2.filterism.global.config.auth.CustomOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsUtils;
 
 @RequiredArgsConstructor
 @Configuration
@@ -27,13 +27,16 @@ public class SecurityConfig {
                 .sessionManagement(configurer ->
                         configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .anyRequest().permitAll()
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/api/**").hasRole(Role.USER.name())
+                        .anyRequest().authenticated()
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService) // 소셜 로그인 성공 시 후속 조치를 담당하는 서비스
+                                .userService(customOAuth2UserService)
                         )
                 );
 

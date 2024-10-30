@@ -2,10 +2,11 @@ package com.group2.filterism.global.config.auth;
 
 import com.group2.filterism.global.config.auth.dto.OAuthAttributes;
 import com.group2.filterism.global.config.auth.dto.SessionUser;
-import com.group2.filterism.user.domain.User;
-import com.group2.filterism.user.domain.repository.UserRepository;
+import com.group2.filterism.domain.user.domain.User;
+import com.group2.filterism.domain.user.domain.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -24,9 +25,9 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        System.out.println("기모찌1");
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
-
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId(); // 현재 로그인 진행 중인 서비스를 구분
 
@@ -43,7 +44,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
                 new SessionUser(user)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
 
         return new DefaultOAuth2User(
-                Collections.emptyList(),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
@@ -52,6 +53,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
         User user = userRepository.findByEmail(attributes.getEmail())
                 .orElse(attributes.toEntity());
         user.update(attributes.getEmail(), attributes.getName());
+        System.out.println("기모찌2");
         return userRepository.save(user);
     }
 }

@@ -30,7 +30,11 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 jwt:
-  access-expiration-time: 1296000000 # 15?
+  access-expiration-time: 1296000000 # 15
   prefix: Bearer
   secret-key: ${JWT_SECRET}
