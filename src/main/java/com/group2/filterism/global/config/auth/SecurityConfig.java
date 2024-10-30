@@ -1,17 +1,15 @@
 package com.group2.filterism.global.config.auth;
 
+import com.group2.filterism.domain.user.domain.vo.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -27,12 +25,15 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(configurer ->
-                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        configurer.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/influencer-verification/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/template/**").permitAll()
+                        .requestMatchers("/api/hashtag/**").permitAll()
+                        .requestMatchers("/api/file/template/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
@@ -45,7 +46,6 @@ public class SecurityConfig {
                                 redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))
                         .defaultSuccessUrl("/")
                 );
-
         return http.build();
     }
 }
