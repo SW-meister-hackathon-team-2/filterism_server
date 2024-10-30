@@ -14,9 +14,9 @@ public record TemplateResponse(
         AccessScope accessScope,
         TemplateType type,
         Long usedCount,
-        String fileId
+        List<String> fileUrls
 ) {
     public static TemplateResponse create(TemplateEntity entity) {
-        return new TemplateResponse(entity.getId(), entity.getTitle(), entity.getHashtags(), entity.getAccessScope(), entity.getType(), entity.getUsedCount(), entity.getFileId());
+        return new TemplateResponse(entity.getId(), entity.getTitle(), entity.getHashtags(), entity.getAccessScope(), entity.getType(), entity.getUsedCount(), entity.getFileUrls());
     }
 }

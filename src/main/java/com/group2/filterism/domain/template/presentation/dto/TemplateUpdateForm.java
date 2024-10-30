@@ -8,6 +8,6 @@ public record TemplateUpdateForm(
         String title,
         String description,
         AccessScope accessScope,
-        List<Long> hashtags
+        List<Long> hashtagIds
 ) {
 }

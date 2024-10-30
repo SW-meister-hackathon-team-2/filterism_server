@@ -1,23 +1,31 @@
 package com.group2.filterism.domain.template.application;
 
+import com.group2.filterism.domain.file.domain.FileEntity;
+import com.group2.filterism.domain.file.domain.FileJpaRepository;
+import com.group2.filterism.domain.hashtag.domain.HashtagEntity;
 import com.group2.filterism.domain.hashtag.domain.HashtagJpaRepository;
 import com.group2.filterism.domain.template.domain.TemplateEntity;
 import com.group2.filterism.domain.template.domain.TemplateJpaRepository;
 import com.group2.filterism.domain.template.presentation.dto.TemplateCreateForm;
 import com.group2.filterism.domain.template.presentation.dto.TemplateUpdateForm;
+import com.group2.filterism.domain.template.vo.AccessScope;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 public interface TemplateWriteUseCase {
-    void create(TemplateCreateForm form);
+    List<String> create(TemplateCreateForm form, List<MultipartFile> files);
     void update(TemplateUpdateForm form, Long id);
     void delete(Long id);
     void use(Long id);
@@ -28,6 +36,10 @@ public interface TemplateWriteUseCase {
 class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
     private final TemplateJpaRepository templateJpaRepository;
     private final HashtagJpaRepository hashtagJpaRepository;
+    private final FileJpaRepository fileJpaRepository;
+
+    @Value("${base.url}")
+    private String baseUrl;
 
     private static final Path rootPath = Paths.get("/Users/seungwon1/Downloads/imgs");
 
@@ -37,39 +49,51 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
 
     @Override
     @Transactional
-    public void create(TemplateCreateForm form) {
-        final var hashtags = hashtagJpaRepository.findAllById(form.hashtags());
+    public List<String> create(TemplateCreateForm form, List<MultipartFile> files) {
+        final var hashtagsResult = hashtagJpaRepository.findAllById(form.hashtagIds());
+        final List<HashtagEntity> hashtags = hashtagsResult.isEmpty()
+                ? Collections.emptyList()
+                : hashtagsResult;
 
-        final var base64Image = form.base64Image();
-        final var parts = base64Image.split(",");
+        final var fileUrls = new LinkedList<String>();
 
-        final var extension = parts[0].split("/")[1].replaceAll(";base64", "");
+        for (MultipartFile file: files) {
+            final var originalFilename = file.getOriginalFilename();
 
-        if (!extensions.contains(extension.toLowerCase())) {
-            throw new IllegalArgumentException("확장자를 확인해주세요.");
-        }
+            if (originalFilename == null) {
+                throw new IllegalArgumentException();
+            }
 
-        final var bytes = base64Image.getBytes();
+            final var extension = originalFilename.split("\\.")[1].toLowerCase();
+            if (!extensions.contains(extension)) {
+                throw new IllegalArgumentException("확장자를 확인해주세요.");
+            }
 
-        final var uuid = UUID.randomUUID().toString();
-        final var filePath = rootPath + "/" + uuid + ".txt";
+            final var uuid = UUID.randomUUID().toString();
+            final var path = uuid + "." + extension;
+            final var finalPath = rootPath + "/" + path;
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
-            fileOutputStream.write(bytes);
-        } catch (IOException e) {
-            throw new RuntimeException("파일 생성 또는 저장 실패", e);
+            try {
+                file.transferTo(new File(finalPath));
+                final var savedFile = fileJpaRepository.save(FileEntity.create(path, extension));
+
+                fileUrls.add(baseUrl + "/api/file/template/" + (savedFile.getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new IllegalArgumentException();
+            }
         }
 
         final var template = TemplateEntity.builder()
                 .title(form.title())
-                .description(form.description())
                 .hashtags(hashtags)
-                .accessScope(form.accessScope())
                 .type(form.type())
-                .fileId(uuid)
+                .fileUrls(fileUrls)
                 .build();
 
         templateJpaRepository.save(template);
+
+        return fileUrls;
     }
 
     @Override
@@ -78,7 +102,7 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
         final var template = templateJpaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("템플릿을 찾지 못했습니다."));
 
-        final var hashtags = hashtagJpaRepository.findAllById(form.hashtags());
+        final var hashtags = hashtagJpaRepository.findAllById(form.hashtagIds());
 
         template.update(form.title(), form.description(), hashtags, form.accessScope());
     }
