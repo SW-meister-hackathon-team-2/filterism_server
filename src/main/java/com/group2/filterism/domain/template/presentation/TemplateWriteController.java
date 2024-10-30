@@ -3,11 +3,12 @@ package com.group2.filterism.domain.template.presentation;
 import com.group2.filterism.domain.template.application.TemplateWriteUseCase;
 import com.group2.filterism.domain.template.presentation.dto.TemplateCreateForm;
 import com.group2.filterism.domain.template.presentation.dto.TemplateUpdateForm;
-import com.group2.filterism.http.ListResponse;
+import com.group2.filterism.global.http.IdResponse;
 import com.group2.filterism.swagger.template.TemplateWriteDocumentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,16 +26,17 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/template")
+@CrossOrigin(origins = "*")
 public class TemplateWriteController implements TemplateWriteDocumentation {
     private final TemplateWriteUseCase useCase;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ListResponse<String> create(
+    public IdResponse create(
             @RequestPart("form") TemplateCreateForm form,
             @RequestPart("files") List<MultipartFile> files
     ) {
-        return new ListResponse(useCase.create(form, files));
+        return new IdResponse(useCase.create(form, files));
     }
 
     @PutMapping("/{templateId}")
@@ -55,5 +57,11 @@ public class TemplateWriteController implements TemplateWriteDocumentation {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long templateId) {
         useCase.delete(templateId);
+    }
+
+    @PostMapping("/{templateId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setUser(@PathVariable String templateId) {
+        useCase.setUser(templateId);
     }
 }

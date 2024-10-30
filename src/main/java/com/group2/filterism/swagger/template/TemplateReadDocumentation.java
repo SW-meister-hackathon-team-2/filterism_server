@@ -22,8 +22,8 @@ public interface TemplateReadDocumentation {
             description = "성공적으로 템플릿을 불러왔습니다.",
             useReturnTypeSchema = true
     )
-    @Operation(summary = "공개된 템플릿 상세 조회 API")
-    TemplateDetailResponse getDetailPublicTemplate(Long templateId);
+    @Operation(summary = "코드를 사용한 템플릿 상세 조회 API")
+    TemplateDetailResponse getDetailTemplateByToken(String templateId);
 
     @ApiResponse(
             responseCode = "200",

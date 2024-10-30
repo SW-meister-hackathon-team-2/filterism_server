@@ -1,7 +1,7 @@
 package com.group2.filterism.swagger.hashtag;
 
 import com.group2.filterism.domain.hashtag.presentation.HashtagResponse;
-import com.group2.filterism.http.ListResponse;
+import com.group2.filterism.global.http.ListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

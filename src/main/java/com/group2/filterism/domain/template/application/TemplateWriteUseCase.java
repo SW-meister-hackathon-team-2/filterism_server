@@ -8,7 +8,7 @@ import com.group2.filterism.domain.template.domain.TemplateEntity;
 import com.group2.filterism.domain.template.domain.TemplateJpaRepository;
 import com.group2.filterism.domain.template.presentation.dto.TemplateCreateForm;
 import com.group2.filterism.domain.template.presentation.dto.TemplateUpdateForm;
-import com.group2.filterism.domain.template.vo.AccessScope;
+import com.group2.filterism.domain.user.application.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public interface TemplateWriteUseCase {
@@ -29,6 +30,7 @@ public interface TemplateWriteUseCase {
     void update(TemplateUpdateForm form, Long id);
     void delete(Long id);
     void use(Long id);
+    void setUser(String templateId);
 }
 
 @Service
@@ -37,6 +39,7 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
     private final TemplateJpaRepository templateJpaRepository;
     private final HashtagJpaRepository hashtagJpaRepository;
     private final FileJpaRepository fileJpaRepository;
+    private final CurrentUser currentUser;
 
     @Value("${base.url}")
     private String baseUrl;
@@ -110,7 +113,14 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
     @Override
     @Transactional
     public void delete(final Long id) {
-        // TODO: 10/29/24 유저 검증 로직 추가해야함.
+        final var user = currentUser.get();
+        final var template = templateJpaRepository.findById(id)
+                .orElseThrow();
+
+        if (!Objects.equals(user.getId(), template.getOwnerId())) {
+            throw new IllegalArgumentException();
+        }
+
         templateJpaRepository.deleteById(id);
     }
 
@@ -121,5 +131,20 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("템플릿을 찾지 못했습니다."));
 
         template.use();
+    }
+
+    @Override
+    @Transactional
+    public void setUser(final String templateId) {
+        final var user = currentUser.get();
+        final var template = templateJpaRepository.findByTemplateId(templateId)
+                .orElseThrow();
+
+        if (template.getOwnerId() != -1) {
+            throw new IllegalStateException();
+        }
+
+        template.setOwnerId(user.getId());
+        template.setOwnerName(user.getName());
     }
 }

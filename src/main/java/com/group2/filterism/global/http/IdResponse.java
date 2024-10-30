@@ -3,9 +3,9 @@ package com.group2.filterism.global.http;
 import com.group2.filterism.domain.influencer.domain.InfluencerVerification;
 
 public record IdResponse(
-        Long id
+        Object id
 ) {
-    public IdResponse(InfluencerVerification verification) {
-        this(verification.getId());
+    public static IdResponse fromInfluencer(InfluencerVerification verification) {
+        return new IdResponse(verification.getId());
     }
 }

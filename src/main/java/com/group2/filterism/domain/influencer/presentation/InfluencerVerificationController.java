@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/influencer-verification")
 @RestController
+@CrossOrigin(origins = "*")
 public class InfluencerVerificationController {
 
     private final InfluencerVerificationWriteUseCase influencerVerificationWriteUseCase;

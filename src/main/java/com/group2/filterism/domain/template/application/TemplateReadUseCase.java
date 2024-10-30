@@ -12,6 +12,7 @@ import java.util.Set;
 public interface TemplateReadUseCase {
     List<TemplateResponse> getAllPublicTemplate();
     TemplateDetailResponse getDetailPublicTemplate(Long id);
+    TemplateDetailResponse getDetailTemplateByToken(String key);
     List<TemplateResponse> search(String text, Set<Long> hashtags);
 }
 
@@ -32,6 +33,14 @@ class TemplateReadUseCaseImpl implements TemplateReadUseCase {
     @Override
     public TemplateDetailResponse getDetailPublicTemplate(final Long id) {
         final var entity = repository.findPublicTemplateById(id)
+                .orElseThrow(() -> new IllegalArgumentException("템플릿을 찾지 못했습니다."));
+
+        return TemplateDetailResponse.create(entity);
+    }
+
+    @Override
+    public TemplateDetailResponse getDetailTemplateByToken(final String key) {
+        final var entity = repository.findByTemplateId(key)
                 .orElseThrow(() -> new IllegalArgumentException("템플릿을 찾지 못했습니다."));
 
         return TemplateDetailResponse.create(entity);

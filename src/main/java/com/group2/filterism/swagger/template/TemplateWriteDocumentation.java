@@ -2,7 +2,7 @@ package com.group2.filterism.swagger.template;
 
 import com.group2.filterism.domain.template.presentation.dto.TemplateCreateForm;
 import com.group2.filterism.domain.template.presentation.dto.TemplateUpdateForm;
-import com.group2.filterism.http.ListResponse;
+import com.group2.filterism.global.http.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +17,7 @@ public interface TemplateWriteDocumentation {
             description = "새 템플릿 생성 완료!"
     )
     @Operation(summary = "새 템플릿 생성 API")
-    ListResponse<String> create(TemplateCreateForm form, List<MultipartFile> files);
+    IdResponse create(TemplateCreateForm form, List<MultipartFile> files);
 
     @ApiResponse(
             responseCode = "204",
@@ -39,4 +39,11 @@ public interface TemplateWriteDocumentation {
     )
     @Operation(summary = "템플릿 삭제 API")
     void delete(Long templateId);
+
+    @ApiResponse(
+            responseCode = "204",
+            description = "템플릿 등록 완료"
+    )
+    @Operation(summary = "템플릿 등록 API")
+    void setUser(String templateId);
 }

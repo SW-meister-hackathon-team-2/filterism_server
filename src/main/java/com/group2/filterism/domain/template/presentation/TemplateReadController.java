@@ -7,6 +7,7 @@ import com.group2.filterism.global.http.ListResponse;
 import com.group2.filterism.swagger.template.TemplateReadDocumentation;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/template")
+@CrossOrigin(origins = "*")
 class TemplateReadController implements TemplateReadDocumentation {
     private final TemplateReadUseCase useCase;
 
@@ -30,9 +32,10 @@ class TemplateReadController implements TemplateReadDocumentation {
     }
 
     @GetMapping("/{templateId}")
-    public TemplateDetailResponse getDetailPublicTemplate(@PathVariable Long templateId) {
-        return useCase.getDetailPublicTemplate(templateId);
+    public TemplateDetailResponse getDetailTemplateByToken(@PathVariable String templateId) {
+        return useCase.getDetailTemplateByToken(templateId);
     }
+
 
     @GetMapping("/search")
     public ListResponse<TemplateResponse> search(

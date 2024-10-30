@@ -29,7 +29,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.PATCH, "/api/influencer-verification/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/api/template/**").permitAll()
+                        .requestMatchers("/api/template/**").permitAll()
                         .requestMatchers("/api/hashtag/**").permitAll()
                         .requestMatchers("/api/file/template/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
@@ -44,7 +44,7 @@ public class SecurityConfig {
                         )
                         .redirectionEndpoint(redirectionEndpointConfig ->
                                 redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("https://filterism.netlify.app/")
                 );
         return http.build();
     }

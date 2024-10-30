@@ -1,6 +1,6 @@
 package com.group2.filterism;
 
-import com.group2.filterism.http.ListResponse;
+import com.group2.filterism.global.http.ListResponse;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;

@@ -5,6 +5,7 @@ import com.group2.filterism.swagger.file.FileReadDocumentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.nio.file.Files;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/file")
+@CrossOrigin(origins = "*")
 class FileReadController implements FileReadDocumentation {
     private final FileReadUseCase useCase;
 
