@@ -18,7 +18,7 @@ public class InfluencerVerification {
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String message;
+    private String content;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -29,8 +29,8 @@ public class InfluencerVerification {
     private User user;
 
     @Builder
-    public InfluencerVerification(String message, User user) {
-        this.message = message;
+    public InfluencerVerification(String content, User user) {
+        this.content = content;
         this.status = VerificationStatus.PENDING;
         this.user = user;
     }
