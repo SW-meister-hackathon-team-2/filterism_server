@@ -3,7 +3,7 @@ package com.group2.filterism.domain.template.presentation;
 import com.group2.filterism.domain.template.application.TemplateReadUseCase;
 import com.group2.filterism.domain.template.presentation.dto.TemplateDetailResponse;
 import com.group2.filterism.domain.template.presentation.dto.TemplateResponse;
-import com.group2.filterism.http.ListResponse;
+import com.group2.filterism.global.http.ListResponse;
 import com.group2.filterism.swagger.template.TemplateReadDocumentation;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;

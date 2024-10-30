@@ -1,6 +1,7 @@
 package com.group2.filterism.domain.hashtag.presentation;
 
 import com.group2.filterism.domain.hashtag.application.HashtagReadUseCase;
+import com.group2.filterism.global.http.ListResponse;
 import com.group2.filterism.http.ListResponse;
 import com.group2.filterism.swagger.hashtag.HashtagReadDocumentation;
 import lombok.RequiredArgsConstructor;

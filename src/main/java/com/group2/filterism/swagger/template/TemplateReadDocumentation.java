@@ -1,6 +1,6 @@
 package com.group2.filterism.swagger.template;
 
-import com.group2.filterism.http.ListResponse;
+import com.group2.filterism.global.http.ListResponse;
 import com.group2.filterism.domain.template.presentation.dto.TemplateDetailResponse;
 import com.group2.filterism.domain.template.presentation.dto.TemplateResponse;
 import io.swagger.v3.oas.annotations.Operation;

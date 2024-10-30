@@ -1,4 +1,4 @@
-package com.group2.filterism.http;
+package com.group2.filterism.global.http;
 
 import java.util.List;
 
