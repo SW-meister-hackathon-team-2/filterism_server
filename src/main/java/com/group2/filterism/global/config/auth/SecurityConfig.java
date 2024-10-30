@@ -1,22 +1,24 @@
-package com.group2.filterism.global.config;
+package com.group2.filterism.global.config.auth;
 
-import com.group2.filterism.domain.user.domain.vo.Role;
-import com.group2.filterism.global.config.auth.CustomOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomOauth2UserService customOAuth2UserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,8 +30,9 @@ public class SecurityConfig {
                         configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/**").hasRole(Role.USER.name())
-                        .anyRequest().authenticated()
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
@@ -38,6 +41,9 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
+                        .redirectionEndpoint(redirectionEndpointConfig ->
+                                redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))
+                        .defaultSuccessUrl("/")
                 );
 
         return http.build();

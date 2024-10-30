@@ -1,9 +1,9 @@
 package com.group2.filterism.global.config.auth;
 
-import com.group2.filterism.global.config.auth.dto.OAuthAttributes;
-import com.group2.filterism.global.config.auth.dto.SessionUser;
 import com.group2.filterism.domain.user.domain.User;
 import com.group2.filterism.domain.user.domain.repository.UserRepository;
+import com.group2.filterism.global.config.auth.dto.OAuthAttributes;
+import com.group2.filterism.global.config.auth.dto.SessionUser;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,13 +19,12 @@ import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
-public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("기모찌1");
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
@@ -40,8 +39,8 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User user = saveOrUpdate(attributes);
 
-        httpSession.setAttribute("user",
-                new SessionUser(user)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
+        httpSession.setAttribute("user", new
+                SessionUser(user)); // 세션에 사용자 정보를 저장하기 위한 Dto 클래스
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),
@@ -52,8 +51,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .orElse(attributes.toEntity());
-        user.update(attributes.getEmail(), attributes.getName());
-        System.out.println("기모찌2");
+
         return userRepository.save(user);
     }
 }

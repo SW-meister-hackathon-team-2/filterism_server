@@ -9,7 +9,10 @@ spring:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
-            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+#            redirect-uri: http://localhost:8080/login/oauth2/code/google
 
   jpa:
     database: mysql
@@ -29,10 +32,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
-logging:
-  level:
-    org.springframework.security: DEBUG
 
 jwt:
   access-expiration-time: 1296000000 # 15

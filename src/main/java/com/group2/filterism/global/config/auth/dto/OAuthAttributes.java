@@ -9,14 +9,15 @@ import java.util.Map;
 
 @Getter
 public class OAuthAttributes {
-
-    private final Map<String, Object> attributes;
-    private final String nameAttributeKey;
-    private final String name;
-    private final String email;
+    private Map<String, Object> attributes;
+    private String nameAttributeKey;
+    private String name;
+    private String email;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email) {
+    public OAuthAttributes(Map<String, Object> attributes,
+                           String nameAttributeKey, String name,
+                           String email) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
@@ -33,7 +34,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    // User 엔티티를 처음 가입할 때 생성하고, 기본 권한은 GUEST로 함
+    // User 엔티티를 처음 가입할 때 생성하고, 기본 권한은 USER로 함
     public User toEntity() {
         return User.builder()
                 .name(name)
