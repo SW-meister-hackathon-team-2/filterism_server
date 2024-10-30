@@ -1,6 +1,6 @@
-package com.group2.filterism.hashtag.presentation;
+package com.group2.filterism.domain.hashtag.presentation;
 
-import com.group2.filterism.hashtag.domain.HashtagEntity;
+import com.group2.filterism.domain.hashtag.domain.HashtagEntity;
 
 public record HashtagResponse(
         Long id,

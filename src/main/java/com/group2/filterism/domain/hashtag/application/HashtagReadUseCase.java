@@ -1,7 +1,7 @@
-package com.group2.filterism.hashtag.application;
+package com.group2.filterism.domain.hashtag.application;
 
-import com.group2.filterism.hashtag.domain.HashtagJpaRepository;
-import com.group2.filterism.hashtag.presentation.HashtagResponse;
+import com.group2.filterism.domain.hashtag.domain.HashtagJpaRepository;
+import com.group2.filterism.domain.hashtag.presentation.HashtagResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

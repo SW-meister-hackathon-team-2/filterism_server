@@ -1,6 +1,6 @@
-package com.group2.filterism.template.presentation;
+package com.group2.filterism.domain.template.presentation.dto;
 
-import com.group2.filterism.template.vo.AccessScope;
+import com.group2.filterism.domain.template.vo.AccessScope;
 
 import java.util.List;
 

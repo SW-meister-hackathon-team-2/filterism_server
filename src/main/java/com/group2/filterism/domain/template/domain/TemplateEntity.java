@@ -1,14 +1,15 @@
-package com.group2.filterism.template.domain;
+package com.group2.filterism.domain.template.domain;
 
-import com.group2.filterism.template.vo.AccessScope;
-import com.group2.filterism.hashtag.domain.HashtagEntity;
-import com.group2.filterism.template.vo.TemplateType;
+import com.group2.filterism.domain.template.vo.AccessScope;
+import com.group2.filterism.domain.hashtag.domain.HashtagEntity;
+import com.group2.filterism.domain.template.vo.TemplateType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +32,9 @@ public class TemplateEntity {
 
     private String description;
 
-    @JoinTable(name = "hashtag")
-    @ManyToMany(targetEntity = HashtagEntity.class)
-    private List<HashtagEntity> hashTags;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "template_id")
+    private List<HashtagEntity> hashtags;
 
     private AccessScope accessScope;
 
@@ -41,26 +42,31 @@ public class TemplateEntity {
 
     private Long usedCount;
 
-    private String fileName;
+    private String fileId;
 
     @Version
     private Long version;
 
+    public void use() {
+        usedCount++;
+    }
+
     public void update(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope) {
         this.title = title;
         this.description = description;
-        this.hashTags = hashTags;
+        this.hashtags = hashTags;
         this.accessScope = accessScope;
     }
 
     @Builder
-    public TemplateEntity(String title, String description, List<HashtagEntity> hashTags, AccessScope accessScope, TemplateType type, String fileName) {
+    public TemplateEntity(String title, String description, List<HashtagEntity> hashtags, AccessScope accessScope, TemplateType type, String fileId) {
         this.title = title;
         this.description = description;
-        this.hashTags = hashTags;
+        this.hashtags = hashtags;
         this.accessScope = accessScope;
         this.type = type;
         this.usedCount = 0L;
-        this.fileName = fileName;
+        this.fileId = fileId;
+        this.version = 0L;
     }
 }

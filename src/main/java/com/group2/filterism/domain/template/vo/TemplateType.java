@@ -1,4 +1,4 @@
-package com.group2.filterism.template.vo;
+package com.group2.filterism.domain.template.vo;
 
 public enum TemplateType {
     /**

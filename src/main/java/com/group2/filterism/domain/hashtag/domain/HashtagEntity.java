@@ -1,11 +1,6 @@
-package com.group2.filterism.hashtag.domain;
+package com.group2.filterism.domain.hashtag.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +13,7 @@ public class HashtagEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 10)
+    @Column(unique = true, nullable = false, length = 10, name = "hg_name")
     private String name;
 
     public HashtagEntity(final String name) {
