@@ -3,6 +3,7 @@ package com.group2.filterism.domain.template.application;
 import com.group2.filterism.domain.template.domain.TemplateJpaRepository;
 import com.group2.filterism.domain.template.presentation.dto.TemplateDetailResponse;
 import com.group2.filterism.domain.template.presentation.dto.TemplateResponse;
+import com.group2.filterism.domain.user.application.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,14 @@ public interface TemplateReadUseCase {
     TemplateDetailResponse getDetailPublicTemplate(Long id);
     TemplateDetailResponse getDetailTemplateByToken(String key);
     List<TemplateResponse> search(String text, Set<Long> hashtags);
+    List<TemplateResponse> getMyTemplate();
 }
 
 @Service
 @RequiredArgsConstructor
 class TemplateReadUseCaseImpl implements TemplateReadUseCase {
     private final TemplateJpaRepository repository;
+    private final CurrentUser currentUser;
 
     @Override
     public List<TemplateResponse> getAllPublicTemplate() {
@@ -49,6 +52,16 @@ class TemplateReadUseCaseImpl implements TemplateReadUseCase {
     @Override
     public List<TemplateResponse> search(final String text, final Set<Long> hashtags) {
         final var entities = repository.search(text, hashtags);
+
+        return entities.stream()
+                .map(TemplateResponse::create)
+                .toList();
+    }
+
+    @Override
+    public List<TemplateResponse> getMyTemplate() {
+        final var user = currentUser.get();
+        final var entities = repository.findAllByOwnerId(user.getId());
 
         return entities.stream()
                 .map(TemplateResponse::create)

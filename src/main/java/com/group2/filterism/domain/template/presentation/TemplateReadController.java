@@ -54,4 +54,9 @@ class TemplateReadController implements TemplateReadDocumentation {
 
         return new ListResponse<>(useCase.search(fixedText, hashtagIds));
     }
+
+    @GetMapping("/my")
+    public ListResponse<TemplateResponse> getMyTemplate() {
+        return new ListResponse<>(useCase.getMyTemplate());
+    }
 }

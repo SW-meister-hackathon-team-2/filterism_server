@@ -15,9 +15,10 @@ public record TemplateDetailResponse(
         AccessScope accessScope,
         TemplateType type,
         List<String> images,
-        Long usedCount
+        Long usedCount,
+        String ownerName
 ) {
     public static TemplateDetailResponse create(TemplateEntity entity) {
-        return new TemplateDetailResponse(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getHashtags(), entity.getAccessScope(), entity.getType(), entity.getFileUrls(), entity.getUsedCount());
+        return new TemplateDetailResponse(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getHashtags(), entity.getAccessScope(), entity.getType(), entity.getFileUrls(), entity.getUsedCount(), entity.getOwnerName());
     }
 }

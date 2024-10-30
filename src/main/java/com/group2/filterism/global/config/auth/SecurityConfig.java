@@ -2,6 +2,7 @@ package com.group2.filterism.global.config.auth;
 
 import com.group2.filterism.domain.user.domain.vo.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+
+    @Value("${base.url}")
+    private String baseUrl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,9 +46,12 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
+
                         .redirectionEndpoint(redirectionEndpointConfig ->
-                                redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))
-                        .defaultSuccessUrl("https://filterism.netlify.app/")
+                                redirectionEndpointConfig.baseUri("/login/oauth2/code/**")
+                        )
+
+                        .defaultSuccessUrl(baseUrl + "/login/success")
                 );
         return http.build();
     }

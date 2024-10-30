@@ -16,6 +16,7 @@ import java.util.Set;
 
 public interface TemplateJpaRepository extends JpaRepository<TemplateEntity, Long>, JpaSpecificationExecutor<TemplateEntity> {
     List<TemplateEntity> findAllByAccessScope(AccessScope accessScope);
+    List<TemplateEntity> findAllByOwnerId(Long ownerId);
     Optional<TemplateEntity> findByIdAndAccessScope(Long id, AccessScope accessScope);
     Optional<TemplateEntity> findByTemplateId(String id);
 

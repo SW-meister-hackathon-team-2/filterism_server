@@ -32,4 +32,12 @@ public interface TemplateReadDocumentation {
     )
     @Operation(summary = "공개된 템플릿 검색 API")
     ListResponse<TemplateResponse> search(String text, String hashtags);
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공적으로 템플릿을 불러왔습니다.",
+            useReturnTypeSchema = true
+    )
+    @Operation(summary = "나의 템플릿 조회 API")
+    ListResponse<TemplateResponse> getMyTemplate();
 }

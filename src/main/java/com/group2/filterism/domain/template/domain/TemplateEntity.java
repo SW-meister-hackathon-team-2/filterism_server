@@ -96,7 +96,6 @@ public class TemplateEntity {
         this.ownerId = -1L;
         this.ownerName = "";
         this.fileUrls = fileUrls;
-        this.version = 0L;
         this.templateId = UUID.randomUUID().toString().substring(1,6);
     }
 }

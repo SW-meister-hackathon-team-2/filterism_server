@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public interface TemplateWriteUseCase {
-    List<String> create(TemplateCreateForm form, List<MultipartFile> files);
+    String create(TemplateCreateForm form, List<MultipartFile> files);
     void update(TemplateUpdateForm form, Long id);
     void delete(Long id);
     void use(Long id);
@@ -52,7 +52,7 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
 
     @Override
     @Transactional
-    public List<String> create(TemplateCreateForm form, List<MultipartFile> files) {
+    public String create(TemplateCreateForm form, List<MultipartFile> files) {
         final var hashtagsResult = hashtagJpaRepository.findAllById(form.hashtagIds());
         final List<HashtagEntity> hashtags = hashtagsResult.isEmpty()
                 ? Collections.emptyList()
@@ -87,6 +87,7 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
             }
         }
 
+
         final var template = TemplateEntity.builder()
                 .title(form.title())
                 .hashtags(hashtags)
@@ -94,9 +95,9 @@ class TemplateWriteUseCaseImpl implements TemplateWriteUseCase {
                 .fileUrls(fileUrls)
                 .build();
 
-        templateJpaRepository.save(template);
+        final var savedTemplate = templateJpaRepository.save(template);
 
-        return fileUrls;
+        return savedTemplate.getTemplateId();
     }
 
     @Override
