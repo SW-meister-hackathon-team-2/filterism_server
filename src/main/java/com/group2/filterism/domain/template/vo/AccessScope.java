@@ -12,5 +12,6 @@ public enum AccessScope {
     /**
      * 비동개
      */
-    PRIVATE
+    PRIVATE,
+    REJECTED
 }

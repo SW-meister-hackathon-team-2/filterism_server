@@ -18,6 +18,10 @@ public interface TemplateJpaRepository extends JpaRepository<TemplateEntity, Lon
     List<TemplateEntity> findAllByAccessScope(AccessScope accessScope);
     Optional<TemplateEntity> findByIdAndAccessScope(Long id, AccessScope accessScope);
 
+    default Optional<TemplateEntity> findPendingTemplateById(Long id) {
+        return findByIdAndAccessScope(id, AccessScope.PENDING);
+    }
+
     default Optional<TemplateEntity> findPublicTemplateById(Long id) {
         return findByIdAndAccessScope(id, AccessScope.PUBLIC);
     }

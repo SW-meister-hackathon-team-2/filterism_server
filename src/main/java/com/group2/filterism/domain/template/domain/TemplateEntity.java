@@ -4,6 +4,9 @@ import com.group2.filterism.domain.template.vo.AccessScope;
 import com.group2.filterism.domain.hashtag.domain.HashtagEntity;
 import com.group2.filterism.domain.template.vo.TemplateType;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +20,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Version;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -42,10 +46,25 @@ public class TemplateEntity {
 
     private Long usedCount;
 
-    private String fileId;
+    @ElementCollection
+    @CollectionTable(
+            name = "file_url",
+            joinColumns = @JoinColumn(name = "template_id")
+    )
+    private List<String> fileUrls;
+
+    private String templateId;
 
     @Version
     private Long version;
+
+    public void reject() {
+        accessScope = AccessScope.REJECTED;
+    }
+
+    public void accept() {
+        accessScope = AccessScope.PUBLIC;
+    }
 
     public void use() {
         usedCount++;
@@ -59,14 +78,15 @@ public class TemplateEntity {
     }
 
     @Builder
-    public TemplateEntity(String title, String description, List<HashtagEntity> hashtags, AccessScope accessScope, TemplateType type, String fileId) {
+    public TemplateEntity(String title, List<HashtagEntity> hashtags, TemplateType type, List<String> fileUrls) {
         this.title = title;
-        this.description = description;
+        this.description = "";
         this.hashtags = hashtags;
-        this.accessScope = accessScope;
+        this.accessScope = AccessScope.PRIVATE;
         this.type = type;
         this.usedCount = 0L;
-        this.fileId = fileId;
+        this.fileUrls = fileUrls;
         this.version = 0L;
+        this.templateId = UUID.randomUUID().toString().substring(1,6);
     }
 }

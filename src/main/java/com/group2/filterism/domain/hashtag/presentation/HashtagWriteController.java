@@ -1,6 +1,7 @@
 package com.group2.filterism.domain.hashtag.presentation;
 
 import com.group2.filterism.domain.hashtag.application.HashtagWriteUseCase;
+import com.group2.filterism.swagger.hashtag.HashtagWriteDocumentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,14 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/hashtag")
-class HashtagWriteController {
+class HashtagWriteController implements HashtagWriteDocumentation {
     private final HashtagWriteUseCase useCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void create(@RequestBody CreateForm form) {
+    public void create(@RequestBody CreateForm form) {
         useCase.create(form.tag());
     }
-
-    record CreateForm(String tag) {}
 }
